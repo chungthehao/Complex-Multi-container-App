@@ -36,3 +36,39 @@ const redisClient = redis.createClient({
   retry_strategy: () => 1000
 })
 const redisPublisher = redisClient.duplicate()
+
+
+// Express route handlers
+app.get('/', (req, res) => {
+  app.send('Hi, we\'re working...')
+})
+
+app.get('/values/all', async (req, res) => {
+  const values = await pgClient.query('SELECT * FROM values')
+  res.send(values.rows) // .rows to get rid of unneccesary info
+})
+
+app.get('/values/current', async (req, res) => {
+  redisClient.hgetall('values', (err, values) => {
+    res.send(values)
+  })
+})
+
+app.post('/values', async (req, res) => {
+  const index = req.body.index
+
+  // Check if it's too large
+  if (parseInt(index) > 40) {
+    return res.status(422).send('Index too high!!')
+  }
+
+  // Store the new index to Redis, also trigger worker to work on it
+  redisClient.hset('values', index, 'Nothing yet!')
+  redisPublisher.publish('insert', index)
+  pgClient.query('INSERT INTO values(number) VALUES($1)', [index])
+
+  res.send({ working: true })
+})
+
+
+app.listen(5000, err => console.log('Listening on port 5000...'))
