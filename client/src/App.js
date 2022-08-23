@@ -1,23 +1,24 @@
 import logo from './logo.svg';
 import './App.css';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
+import Fib from './Fib';
+import OtherPage from './OtherPage';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <BrowserRouter>
+        <header className="App-header">
+          <img src={logo} className="App-logo" alt="logo" />
+          <h1>Fibonacci</h1>
+          <Link to='/'>Home</Link>
+          <Link to='/otherpage'>Other page</Link>
+        </header>
+        <Routes>
+          <Route path='/' element={<Fib />} />
+          <Route path='/otherpage' element={<OtherPage />} />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
