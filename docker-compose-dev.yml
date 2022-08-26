@@ -1,5 +1,15 @@
 version: '3'
 services:
+  nginx:
+    restart: always
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./nginx
+    depends_on:
+      - api
+      - client
+    ports:
+      - 3456:80
   postgres:
     image: postgres:latest
     environment:
