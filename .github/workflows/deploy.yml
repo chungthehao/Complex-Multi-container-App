@@ -11,7 +11,7 @@ jobs:
       - run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
       - run: docker build -t henrychung/test-react -f ./client/Dockerfile.dev ./client
       - run: docker run -e CI=true henrychung/test-react npm test
-  build_images:
+  build_images_and_push_to_dockerhub:
     needs: testing
     runs-on: ubuntu-latest
     steps:
@@ -21,3 +21,7 @@ jobs:
       - run: docker build -t henrychung/complex-nginx ./nginx
       - run: docker build -t henrychung/complex-server ./server
       - run: docker build -t henrychung/complex-worker ./worker
+      - run: docker push henrychung/complex-client
+      - run: docker push henrychung/complex-nginx
+      - run: docker push henrychung/complex-server
+      - run: docker push henrychung/complex-worker
