@@ -9,8 +9,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1>Fibonacci</h1>
+          <h1>Fibonacci Calculator</h1>
           <Link to='/'>Home</Link>
           <Link to='/otherpage'>Other page</Link>
         </header>
